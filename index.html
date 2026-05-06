@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>XP Familier — Tenmalexis</title>
 <link rel="stylesheet" href="style.css">
-<script src="resources_list.js"></script>
 <script src="script.js"></script>
 </head>
 <body>
@@ -54,18 +53,19 @@
   </div>
 </div></div>
 
-<div style="background:#080810;border-bottom:2px solid #2a2a4a"><div class="tabs" style="max-width:1600px;margin:0 auto;padding:0 32px">
-  <div class="tab active" onclick="switchTab('rentabilite')">💰 Rentabilité</div>
-  <div class="tab" onclick="switchTab('favoris')">⭐ Favoris</div>
-  <div class="tab" onclick="switchTab('liste')">📋 Liste complète (1994)</div>
-</div></div>
+<div style="background:#080810;border-bottom:2px solid #2a2a4a">
+  <div class="tabs" style="max-width:1600px;margin:0 auto;padding:0 32px">
+    <div class="tab active" onclick="switchTab('rentabilite')">💰 Rentabilité</div>
+    <div class="tab" onclick="switchTab('favoris')">⭐ Favoris</div>
+    <div class="tab" onclick="switchTab('liste')">📋 Liste complète (1994)</div>
+  </div>
+</div>
 
 <div class="content">
 
   <!-- ONGLET RENTABILITE -->
   <div class="tab-panel active" id="panel-rentabilite">
     <div class="rent-panel">
-
       <div class="rent-card">
         <div class="rent-card-title">🐾 Mes familiers</div>
         <div class="rent-body">
@@ -121,49 +121,52 @@
     </div>
   </div>
 
-  <!-- ONGLET FAVORIS -->
-  <div class="tab-panel" id="panel-favoris">
-    <div class="fav-panel-controls">
-      <select class="search-bar" id="fav-sort" onchange="renderFavoris()" style="background:#0f0f1a;border:1px solid #333;border-radius:6px;padding:8px 10px;font-size:12px;color:#fff;font-family:'Exo 2',sans-serif;cursor:pointer">
-        <option value="nom">Nom A→Z</option>
-        <option value="xp-desc">XP décroissant</option>
-        <option value="xp-asc">XP croissant</option>
-        <option value="prix-desc">Prix limite décroissant</option>
-        <option value="prix-asc">Prix limite croissant</option>
-      </select>
-      <span class="fav-count" id="fav-count"></span>
+  <div id="panel-resource">
+    <!-- ONGLET FAVORIS -->
+    <div class="tab-panel" id="panel-favoris">
+      <div class="fav-panel-controls">
+        <select class="search-bar" id="fav-sort" onchange="renderFavoris()" style="background:#0f0f1a;border:1px solid #333;border-radius:6px;padding:8px 10px;font-size:12px;color:#fff;font-family:'Exo 2',sans-serif;cursor:pointer">
+          <option value="nom">Nom A→Z</option>
+          <option value="xp-desc">XP décroissant</option>
+          <option value="xp-asc">XP croissant</option>
+          <option value="prix-desc">Prix limite décroissant</option>
+          <option value="prix-asc">Prix limite croissant</option>
+        </select>
+        <span class="fav-count" id="fav-count"></span>
+      </div>
     </div>
-  </div>
 
-  <!-- LISTE COMPLÈTE -->
-  <div class="tab-panel" id="panel-liste">
-    <div class="search-bar">
-      <input type="text" id="search" placeholder="Rechercher une ressource..." oninput="filterList()">
-      <select id="filter-sort" onchange="filterList()">
-        <option value="xp-desc">XP décroissant</option>
-        <option value="xp-asc">XP croissant</option>
-        <option value="prix-asc">Prix limite croissant</option>
-        <option value="prix-desc">Prix limite décroissant</option>
-        <option value="nom">Nom A→Z</option>
-      </select>
-      <span class="count-badge" id="count-badge"></span>
+    <!-- ONGLET LISTE COMPLÈTE -->
+    <div class="tab-panel" id="panel-liste">
+      <div class="search-bar">
+        <input type="text" id="search" placeholder="Rechercher une ressource..." oninput="filterList()">
+        <select id="filter-sort" onchange="filterList()">
+          <option value="xp-desc">XP décroissant</option>
+          <option value="xp-asc">XP croissant</option>
+          <option value="prix-asc">Prix limite croissant</option>
+          <option value="prix-desc">Prix limite décroissant</option>
+          <option value="nom">Nom A→Z</option>
+        </select>
+        <span class="count-badge" id="count-badge"></span>
+      </div>
     </div>
-  </div>
-  
-  <div class="table-wrap tab-panel" id="panel-header" style="max-width:900px">
-    <table class="big-table" id="big-table">
-      <thead>
-        <tr>
-          <th style="width:36px;text-align:center"></th>
-          <th style="text-align:left">Ressource</th>
-          <th style="text-align:right">XP</th>
-          <th style="text-align:right">Qté totale</th>
-          <th style="text-align:right">Prix limite /u (k)</th>
-        </tr>
-      </thead>
-      <tbody id="big-tbody">
-      </tbody>
-    </table>
+    
+    <!-- LISTE RESSOURCES -->
+    <div class="table-wrap tab-panel" id="panel-header" style="max-width:900px">
+      <table class="big-table" id="big-table">
+        <thead>
+          <tr>
+            <th style="width:36px;text-align:center"></th>
+            <th style="text-align:left">Ressource</th>
+            <th style="text-align:right">XP</th>
+            <th style="text-align:right">Qté totale</th>
+            <th style="text-align:right">Prix limite /u (k)</th>
+          </tr>
+        </thead>
+        <tbody id="big-tbody">
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
