@@ -1,8 +1,7 @@
-[README (5).md](https://github.com/user-attachments/files/26675602/README.5.md)
 # 🐾 XP FAMILIER — CALCULATEUR DE RENTABILITÉ
 
 > **Optimise le montage de tes familiers sur Dofus 3 (Unity)**  
-> Rentabilité · Prix de référence · Ressources · Favoris — by **Tenmalexis**
+> Rentabilité · Prix max d'achat de ressource · Ressources · Favoris — by **Tenmalexis** — edited by **Domovoy/Lushen**
 
 ---
 
@@ -14,7 +13,7 @@
 
 ## 🎯 À quoi ça sert ?
 
-Monter un familier lvl 1 → 100 demande des croquettes, craftées à partir de ressources de monstres.  
+Monter un familier lvl 1 → 100 demande des croquettes ou des ressources de monstres.  
 Cet outil te permet de savoir exactement **combien tu peux payer chaque ressource** pour rester rentable, en partant du prix d'achat et de revente du familier.
 
 ---
@@ -22,7 +21,7 @@ Cet outil te permet de savoir exactement **combien tu peux payer chaque ressourc
 ## 🧭 Les 3 onglets
 
 ### 💰 Rentabilité
-Détermine ton **prix de référence** (budget croquettes max) à partir de la valeur du familier.
+Détermine ton **prix d'achat de ressources max** à partir de la valeur du familier.
 
 | Champ | Description |
 |---|---|
@@ -33,21 +32,21 @@ Détermine ton **prix de référence** (budget croquettes max) à partir de la v
 
 - Plusieurs familiers → calcul par **moyenne**
 - Slider **Marge de sécurité** → déduit un % du gain pour couvrir les aléas
-- Bouton **✅ Utiliser ce prix de référence** → injecte la valeur dans les onglets suivants
+- Bouton **✅ Utiliser ce prix max d'achat de ressource** → injecte la valeur dans les onglets suivants
 
 ### ⭐ Favoris
 Tes ressources cochées dans la liste complète, regroupées ici.  
 Tris : Nom · XP ↑↓ · Prix limite ↑↓
 
 ### 📋 Liste complète (1994 ressources)
-Toutes les ressources utilisables pour les croquettes :
+Toutes les ressources utilisables pour monter tes familiers :
 
 | Colonne | Description |
 |---|---|
 | ⭐ | Ajouter / retirer des favoris |
 | Ressource | Nom de la ressource |
 | XP | XP apportée par unité |
-| Qté | Quantité nécessaire par croquette |
+| Qté | Quantité nécessaire par monter lvl 100 |
 | Prix limite /u | Prix max à payer pour rester dans ton budget |
 
 ---
@@ -57,8 +56,6 @@ Toutes les ressources utilisables pour les croquettes :
 | Paramètre | Valeur |
 |---|---|
 | XP total lvl 1 → 100 | 179 592 xp |
-| XP par croquette | 500 xp |
-| Nombre de croquettes nécessaires | 359,18 |
 
 ---
 
@@ -70,7 +67,7 @@ Toutes les ressources utilisables pour les croquettes :
 | **⬇ Exporter** | Génère un fichier `.json` à conserver sur ton PC |
 | **⬆ Importer** | Recharge un `.json` sur n'importe quel PC |
 
-Le fichier JSON contient : familiers, marge, prix de référence et favoris.
+Le fichier JSON contient : familiers, marge, prix max d'achat des ressources et favoris.
 
 ---
 
