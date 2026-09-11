@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- saved from url=(0041)https://tenmalexis.github.io/xp-familier/ -->
-<html lang="fr"><script src="chrome-extension://cpmkedoipcpimgecpmgpldfpohjplkpp/gt-window-provider-hedera.js"></script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="chrome-extension://cpmkedoipcpimgecpmgpldfpohjplkpp/gt-window-provider-hedera.js"></script>
+<html lang="fr"><script src="chrome-extension://cpmkedoipcpimgecpmgpldfpohjplkpp/gt-window-provider-hedera.js"></script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="chrome-extension://cpmkedoipcpimgecpmgpldfpohjplkpp/gt-window-provider-hedera.js"></script><script src="chrome-extension://cpmkedoipcpimgecpmgpldfpohjplkpp/gt-window-provider-hedera.js"></script>
 
 <link href="./tenmalexis.github.io_files/XP_Familier___Tenmalexis (11).html" rel="stylesheet">
 <style>
@@ -530,7 +530,7 @@ nav.social{
   <div class="header">
     <div class="header-brand">
       <div class="mark">
-        <img src="https://api.dofusdb.fr/img/items/18091.png" alt="Familier Dofus">
+        <img src="./tenmalexis.github.io_files/18091.png" alt="Familier Dofus">
       </div>
       <div class="header-brand-text">
         <span class="header-brand-title">XP FAMILIER — CALCULATEUR DE RENTABILITÉ</span>
@@ -575,7 +575,7 @@ nav.social{
     <input type="number" id="xp-total" value="179592" readonly="" style="opacity:0.5;cursor:not-allowed">
     <span class="param-unit">xp</span>
   </div>
-  <div class="param-group">
+  <div class="param-group" style="display:none">
     <label>XP par croquette</label>
     <input type="number" id="xp-croquette" value="500" readonly="" style="opacity:0.5;cursor:not-allowed">
     <span class="param-unit">xp</span>
@@ -586,7 +586,8 @@ nav.social{
     <span class="param-unit">k</span>
   </div>
   <div class="param-result" id="param-summary">
-    <span id="nb-croq">359,18</span> croquettes &nbsp;|&nbsp; Prix limite croquette : <span id="prix-croq">13 920</span> k
+    Prix limite : <span id="prix-croq">13 920</span> k
+    <span id="nb-croq" style="display:none">359,18</span>
   </div>
   <div class="almanax-toggle active" id="almanax-toggle" onclick="toggleAlmanax()">
     <div class="almanax-switch"></div>
@@ -13306,6 +13307,7 @@ function calcPlan() {
 loadState();
 
 </script>
+
 
 
 
