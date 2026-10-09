@@ -2,8 +2,8 @@
 <!-- saved from url=(0041)https://tenmalexis.github.io/xp-familier/ -->
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<link rel="preconnect" href="https://fonts.bunny.net">
-<link href="https://fonts.bunny.net/css?family=dm-sans:400,500,600,700|rajdhani:600,700" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.bunny.net/">
+<link href="./tenmalexis.github.io_files/css" rel="stylesheet">
 <style>
 :root{
   --gold:#c9a84c;--gold2:#e8c97a;--red:#e94560;
@@ -576,7 +576,7 @@ textarea{
   <div class="header">
     <div class="header-brand">
       <div class="mark">
-        <img src="https://api.dofusdb.fr/img/items/18091.png" alt="Familier Dofus">
+        <img src="./tenmalexis.github.io_files/18091.png" alt="Familier Dofus">
       </div>
       <div class="header-brand-text">
         <span class="header-brand-title">XP FAMILIER — CALCULATEUR DE RENTABILITÉ</span>
@@ -12820,6 +12820,7 @@ function toggleAlmanax(){
   toggle.classList.toggle('active', almanaxActive);
   recalc();
   renderFavoris();
+  saveState();
 }
 
 function recalc(){
@@ -13039,7 +13040,7 @@ function toggleFav(nom, btn) {
     btn.classList.add('active');
     btn.title = 'Retirer des favoris';
   }
-  saveFavs();
+  saveState();
   if (document.getElementById('panel-favoris').classList.contains('active')) renderFavoris();
 }
 
@@ -13112,6 +13113,7 @@ function addFamilierRow(nom='', achat='', vente='') {
     <button class="del-btn" onclick="delFamilierRow(${id})" title="Supprimer">✕</button>`;
   container.appendChild(div);
   calcRent();
+  saveState();
 }
 
 function delFamilierRow(id) {
@@ -13202,97 +13204,81 @@ function applyPrixRef() {
 
 // ===== SAUVEGARDE HASH URL (compatible file://) =====
 
-function showAutosaveDot(state) {
-  const dot = document.getElementById('autosave-dot');
-  if (!dot) return;
-  dot.className = 'autosave-dot ' + state;
-  if (state === 'saving') {
-    dot.textContent = 'Sauvegarde…';
-  } else if (state === 'saved') {
-    dot.textContent = '✓ Sauvegardé';
-    setTimeout(() => { dot.textContent = 'Sauvegarde auto'; dot.className = 'autosave-dot'; }, 2000);
-  }
-}
+// Sauvegarde locale invisible : même navigateur et même adresse du site.
+const TENMA_AUTOSAVE_KEY = 'tenmalexis_xp_familier_autosave_v3';
+let restoringAutosave = false;
 
 function saveState() {
+  if (restoringAutosave) return;
   try {
-    showAutosaveDot('saving');
-    const rows = [];
-    document.querySelectorAll('#familier-rows .familier-row').forEach(row => {
+    const rows = [...document.querySelectorAll('#familier-rows .familier-row')].map(row => {
       const inputs = row.querySelectorAll('input');
-      rows.push({ n: inputs[0].value, a: inputs[1].value, v: inputs[2].value });
+      return {n: inputs[0].value, a: inputs[1].value, v: inputs[2].value};
     });
-    const planRows = [];
-    document.querySelectorAll('#plan-rows .plan-row').forEach(row => {
+    const planRows = [...document.querySelectorAll('#plan-rows .plan-row')].map(row => {
       const inputs = row.querySelectorAll('input');
-      planRows.push({ n: inputs[0].value, q: inputs[1].value, a: inputs[2].value, c: inputs[3].value, v: inputs[4].value });
+      return {n: inputs[0].value, q: inputs[1].value, a: inputs[2].value, c: inputs[3].value, v: inputs[4].value};
     });
     const state = {
-      version: 2,
-      r: rows,
-      pr: planRows,
+      version: 3, r: rows, pr: planRows,
       m: document.getElementById('marge-slider').value,
       b: document.getElementById('budget').value,
-      favs: [...favSet],
-      almanax: almanaxActive
+      favs: [...favSet], almanax: almanaxActive
     };
-    sessionStorage.setItem('xpFamilier_session', JSON.stringify(state));
-    showAutosaveDot('saved');
-  } catch(e) { console.warn('saveState error', e); }
+    localStorage.setItem(TENMA_AUTOSAVE_KEY, JSON.stringify(state));
+  } catch (e) { console.warn('Sauvegarde locale indisponible', e); }
 }
 
 function loadState() {
+  restoringAutosave = true;
   try {
-    // Par défaut, l'Almanax +50% est décoché à chaque lancement
-    almanaxActive = false;
-    const almanaxToggle = document.getElementById('almanax-toggle');
-    if (almanaxToggle) almanaxToggle.classList.remove('active');
-    let state = null;
-    const ss = sessionStorage.getItem('xpFamilier_session');
-    if (ss) { state = JSON.parse(ss); }
-    if (state) {
-      if (state.m) {
+    // Migration éventuelle de l'ancienne sauvegarde temporaire.
+    const stored = localStorage.getItem(TENMA_AUTOSAVE_KEY)
+      || sessionStorage.getItem('xpFamilier_session');
+    const state = stored ? JSON.parse(stored) : null;
+    document.getElementById('familier-rows').innerHTML = '';
+    document.getElementById('plan-rows').innerHTML = '';
+    rowCounter = 0;
+    planCounter = 0;
+    if (state && typeof state === 'object') {
+      if (state.m !== undefined) {
         document.getElementById('marge-slider').value = state.m;
         document.getElementById('marge-val').textContent = state.m + '%';
       }
-      if (state.b) { document.getElementById('budget').value = state.b; }
-      // Almanax toujours désactivé au chargement du site
-      almanaxActive = false;
-      document.getElementById('almanax-toggle').classList.remove('active');
-      document.getElementById('familier-rows').innerHTML = '';
-      rowCounter = 0;
-      if (state.r && state.r.length > 0) {
-        state.r.forEach(r => addFamilierRow(r.n||'', r.a||'', r.v||''));
-      } else { addFamilierRow(); }
-      document.getElementById('plan-rows').innerHTML = '';
-      planCounter = 0;
-      if (state.pr && state.pr.length > 0) {
-        state.pr.forEach(r => addPlanRow(r.n||'', r.q||'', r.a||'', r.c||'', r.v||''));
-      } else { addPlanRow(); }
-      favSet = new Set(state.favs || []);
+      if (state.b !== undefined) document.getElementById('budget').value = state.b;
+      almanaxActive = !!state.almanax;
+      document.getElementById('almanax-toggle').classList.toggle('active', almanaxActive);
+      (Array.isArray(state.r) && state.r.length ? state.r : [{n:'',a:'',v:''}])
+        .forEach(r => addFamilierRow(r.n ?? '', r.a ?? '', r.v ?? ''));
+      (Array.isArray(state.pr) && state.pr.length ? state.pr : [{n:'',q:'',a:'',c:'',v:''}])
+        .forEach(r => addPlanRow(r.n ?? '', r.q ?? '', r.a ?? '', r.c ?? '', r.v ?? ''));
+      favSet = new Set(Array.isArray(state.favs) ? state.favs : []);
     } else {
-      document.getElementById('familier-rows').innerHTML = ''; rowCounter = 0; addFamilierRow();
-      document.getElementById('plan-rows').innerHTML = ''; planCounter = 0; addPlanRow();
+      addFamilierRow();
+      addPlanRow();
     }
-  } catch(e) {
-    try { document.getElementById('familier-rows').innerHTML = ''; } catch(e2){}
-    rowCounter = 0; addFamilierRow();
-    try { document.getElementById('plan-rows').innerHTML = ''; } catch(e2){}
-    planCounter = 0; addPlanRow();
+  } catch (e) {
+    console.warn('Restauration locale impossible', e);
+    if (!document.querySelector('#familier-rows .familier-row')) addFamilierRow();
+    if (!document.querySelector('#plan-rows .plan-row')) addPlanRow();
+  } finally {
+    restoringAutosave = false;
   }
   calcRent();
+  calcPlan();
   recalc();
+  renderFavoris();
+  saveState();
 }
 
-// Auto-save 800ms après la dernière frappe
-let saveTimer = null;
-document.addEventListener('input', function(e) {
-  if (e.target.closest('#familier-rows') || e.target.closest('#plan-rows') ||
-      e.target.id === 'marge-slider' || e.target.id === 'budget') {
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveState, 800);
-  }
+// Écriture immédiate pour garantir la restauration même si F5 est pressé juste après la saisie.
+document.addEventListener('input', e => {
+  if (e.target.matches('#familier-rows input, #plan-rows input, #marge-slider, #budget')) saveState();
 });
+document.addEventListener('change', e => {
+  if (e.target.matches('#familier-rows input, #plan-rows input, #marge-slider, #budget')) saveState();
+});
+window.addEventListener('pagehide', saveState);
 
 // ===== PLANIFICATION =====
 let planCounter = 0;
@@ -13312,6 +13298,7 @@ function addPlanRow(nom='', qte='', achat='', cout='', vente='') {
     <button class="del-btn" onclick="delPlanRow(${id})" title="Supprimer">✕</button>`;
   container.appendChild(div);
   calcPlan();
+  saveState();
 }
 
 function delPlanRow(id) {
@@ -13356,6 +13343,7 @@ function calcPlan() {
 loadState();
 
 </script>
+
 
 
 
